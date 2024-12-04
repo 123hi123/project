@@ -6,12 +6,14 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
         
         // First, check if the account is available
+        const accountData = JSON.stringify({ account: accountInput.value });
+        
         fetch('/check-account', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ account: accountInput.value }),
+            body: accountData,
         })
         .then(response => response.json())
         .then(data => {
@@ -42,12 +44,14 @@ document.addEventListener('DOMContentLoaded', function() {
             address: document.getElementById('address').value
         };
 
+        const jsonData = JSON.stringify(formData);
+
         fetch('/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(formData),
+            body: jsonData,
         })
         .then(response => response.json())
         .then(data => {
