@@ -35,7 +35,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const formData = {
             name: document.getElementById('name').value,
             sex: document.getElementById('sex').value,
-            identity: document.getElementById('identity').value,
             account: accountInput.value,
             password: document.getElementById('password').value,
             email: document.getElementById('email').value,
