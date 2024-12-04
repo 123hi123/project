@@ -1,0 +1,141 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #f0f2f5;
+}
+
+.header {
+    width: 100%;
+    background-color: #007bff;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.logo {
+    height: 60px; /* 調整 logo 高度 */
+}
+
+.container {
+    display: flex;
+    width: 70%;
+    max-width: 1200px;
+    height: 600px; /* 調整容器高度 */
+    border-radius: 16px; /* 圓角效果 */
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2); /* 漸變背景 */
+    margin-top: 4rem; /* 頂部色塊下方的間距 */
+}
+
+.image-section {
+    flex: 1;
+    background: url('images/icons/img1.png') no-repeat center center;
+    background-size: cover;
+}
+
+.image-section img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.login-section {
+    flex: 1;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.login-section h2 {
+    margin-bottom: 1.5rem;
+    color: #333;
+    font-size: 1.8rem; /* 調整標題字體大小 */
+    font-weight: 600;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #555;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem; /* 恢復輸入框內部填充 */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* 動態效果 */
+}
+
+.form-group input:focus {
+    border-color: #0056b3;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.2);
+}
+
+.btn {
+    width: 100%;
+    padding: 1rem; /* 調整內部填充 */
+    border: none;
+    border-radius: 12px; /* 圓角效果 */
+    background-color: #007bff;
+    color: #ffffff;
+    font-size: 1.2rem; /* 調整按鈕字體大小 */
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* 動態效果 */
+}
+
+.btn:hover {
+    background-color: #0056b3;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.footer {
+    margin-top: 1.5rem;
+    font-size: 1rem; /* 調整字體大小 */
+    text-align: center;
+}
+
+.footer a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        height: auto;
+    }
+
+    .login-section {
+        padding: 1.5rem;
+    }
+}
+

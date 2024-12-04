@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用戶註冊</title>
+    <link rel="stylesheet" href="styles/pages/register.css">
+</head>
+<body>
+    <div class="header">
+        <img src="images/icons/logo.png" alt="Logo" class="logo">
+    </div>
+    <div class="container">
+        <div class="form-container">
+            <div class="form-left">
+                <h2>用戶註冊</h2>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="name">姓名</label>
+                        <input type="text" id="name" name="name" required aria-label="姓名">
+                    </div>
+                    <div class="form-group">
+                        <label for="sex">性別</label>
+                        <select id="sex" name="sex" required aria-label="性別">
+                            <option value="" disabled selected>選擇性別</option>
+                            <option value="male">男性</option>
+                            <option value="female">女性</option>
+                            <option value="other">其他</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="identity">身份證字號</label>
+                        <input type="text" id="identity" name="identity" required aria-label="身份證字號">
+                    </div>
+                    <div class="form-group">
+                        <label for="account">帳號</label>
+                        <input type="text" id="account" name="account" required aria-label="帳號">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">密碼</label>
+                        <input type="password" id="password" name="password" required aria-label="密碼">
+                    </div>
+                </form>
+            </div>
+            <div class="form-right">
+                <form>
+                    <div class="form-group">
+                        <label for="email">電子信箱</label>
+                        <input type="email" id="email" name="email" required aria-label="電子信箱">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">手機號碼</label>
+                        <input type="tel" id="phone" name="phone" aria-label="手機號碼">
+                    </div>
+                    <div class="form-group">
+                        <label for="address">地址</label>
+                        <input type="text" id="address" name="address" aria-label="地址">
+                    </div>
+                    <div class="btn-container">
+                        <button type="submit" class="btn">註冊</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="footer">
+            <p>已有帳號？<a href="login.html">登入</a></p>
+        </div>
+    </div>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                identity: document.getElementById('identity').value,
+                sex: document.getElementById('sex').value,
+                account: document.getElementById('account').value,
+                password: document.getElementById('password').value,
+                address: document.getElementById('address').value,
+                phone: document.getElementById('phone').value
+            };
+
+            fetch('/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.result === "申請成功") {
+                    alert('註冊成功！');
+                    window.location.href = 'login.html';
+                } else {
+                    alert('註冊失敗，請重試。');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('發生錯誤，請重試。');
+            });
+        });
+    </script>
+</body>
+</html>

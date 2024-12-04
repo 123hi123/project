@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品登記 - 高端電商平台</title>
+    <link rel="stylesheet" href="../styles/general.css">
+    <link rel="stylesheet" href="../styles/pages/product_register.css">
+    <script src="../scripts/product_register.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">高端電商平台</div>
+            <div class="search-bar">
+                <input type="text" placeholder="搜索商品...">
+                <button>搜索</button>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#">首頁</a></li>
+                <li><a href="#">分類</a></li>
+                <li><a href="#" class="active">商品登記</a></li>
+                <li><a href="#">關於我們</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>商品登記</h1>
+            <p>加入我們的高端商品陣容</p>
+        </section>
+
+        <section class="product-register-form">
+            <form id="product-form" enctype="multipart/form-data" method="POST">
+                <div class="form-columns">
+                    <div class="left-column">
+                        <div class="form-group">
+                            <label for="product-name">商品名稱</label>
+                            <input type="text" id="product-name" name="product-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">商品描述</label>
+                            <textarea id="description" name="description" rows="10" required></textarea>
+                        </div>
+                    </div>
+                    <div class="right-column">
+                        <div class="form-group">
+                            <label for="price">價格 (NT$)</label>
+                            <input type="number" id="price" name="price" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="quantity">庫存數量</label>
+                            <input type="number" id="quantity" name="quantity" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="product-type">商品類型</label>
+                            <select id="product-type" name="product-type" required>
+                                <option value="Electronics">電子產品</option>
+                                <option value="Clothing">服裝</option>
+                                <option value="Books">書籍</option>
+                                <option value="Home">家居</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="discount-value">折扣值 (%)</label>
+                            <input type="number" id="discount-value" name="discount-value" max="90" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="image">商品圖片</label>
+                            <input type="file" id="image" name="image" accept="image/*" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group submit-group">
+                    <button type="submit" class="cta-button">登記商品</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 高端電商平台. All rights reserved.</p>
+    </footer>
+</body>
+</html>
