@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>用戶註冊</title>
     <link rel="stylesheet" href="styles/pages/register.css">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
 <body>
     <div class="header">
@@ -13,9 +12,9 @@
     </div>
     <div class="container">
         <div class="form-container">
-            <h2>用戶註冊</h2>
-            <form id="registerForm">
-                <div class="form-left">
+            <div class="form-left">
+                <h2>用戶註冊</h2>
+                <form id="registerForm">
                     <div class="form-group">
                         <label for="name">姓名</label>
                         <input type="text" id="name" name="name" required aria-label="姓名">
@@ -30,6 +29,10 @@
                         </select>
                     </div>
                     <div class="form-group">
+                        <label for="identity">身份證字號</label>
+                        <input type="text" id="identity" name="identity" required aria-label="身份證字號">
+                    </div>
+                    <div class="form-group">
                         <label for="account">帳號</label>
                         <input type="text" id="account" name="account" required aria-label="帳號">
                     </div>
@@ -37,8 +40,10 @@
                         <label for="password">密碼</label>
                         <input type="password" id="password" name="password" required aria-label="密碼">
                     </div>
-                </div>
-                <div class="form-right">
+                </form>
+            </div>
+            <div class="form-right">
+                <form>
                     <div class="form-group">
                         <label for="email">電子信箱</label>
                         <input type="email" id="email" name="email" required aria-label="電子信箱">
@@ -54,15 +59,13 @@
                     <div class="btn-container">
                         <button type="submit" class="btn">註冊</button>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
         <div class="footer">
             <p>已有帳號？<a href="login.html">登入</a></p>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="scripts/register.js"></script>
 </body>
 </html>

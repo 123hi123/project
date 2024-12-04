@@ -1,57 +1,60 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
     margin: 0;
     padding: 0;
+    background-color: #f0f0f0;
 }
 
 .header {
-    background-color: #333;
-    color: white;
+    background-color: #ffffff;
+    padding: 20px;
     text-align: center;
-    padding: 1em;
 }
 
 .logo {
-    height: 50px;
+    max-width: 150px;
 }
 
 .container {
     max-width: 800px;
-    margin: 2em auto;
-    background-color: white;
-    padding: 2em;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin: 0 auto;
+    padding: 20px;
 }
 
 .form-container {
     display: flex;
-    justify-content: space-between;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
 .form-left, .form-right {
-    width: 48%;
+    flex: 1;
+    padding: 20px;
 }
 
 h2 {
+    text-align: center;
     color: #333;
 }
 
 .form-group {
-    margin-bottom: 1em;
+    margin-bottom: 20px;
 }
 
 label {
     display: block;
-    margin-bottom: 0.5em;
+    margin-bottom: 5px;
+    color: #666;
 }
 
 input, select {
     width: 100%;
-    padding: 0.5em;
+    padding: 10px;
     border: 1px solid #ddd;
-    border-radius: 3px;
+    border-radius: 4px;
+    box-sizing: border-box;
 }
 
 .btn-container {
@@ -60,11 +63,12 @@ input, select {
 
 .btn {
     background-color: #007bff;
-    color: white;
-    padding: 0.5em 1em;
+    color: #ffffff;
     border: none;
-    border-radius: 3px;
+    padding: 10px 20px;
+    border-radius: 4px;
     cursor: pointer;
+    font-size: 16px;
 }
 
 .btn:hover {
@@ -73,7 +77,8 @@ input, select {
 
 .footer {
     text-align: center;
-    margin-top: 1em;
+    margin-top: 20px;
+    color: #666;
 }
 
 .footer a {
@@ -81,8 +86,6 @@ input, select {
     text-decoration: none;
 }
 
-.error-message {
-    color: red;
-    font-size: 0.8em;
-    margin-top: 0.2em;
+.footer a:hover {
+    text-decoration: underline;
 }
