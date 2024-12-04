@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // First, check if the account is available
         const accountData = JSON.stringify({ account: accountInput.value });
         
-        fetch('/check-account', {
+        fetch('http://127.0.0.1:4998/check-account', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json())
         .then(data => {
-            if (data.result === 1) {
+            if (data.result == 1 || data.result === "1") {
                 // Account is available, proceed with full registration
                 submitFullRegistration();
             } else {
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const jsonData = JSON.stringify(formData);
 
-        fetch('/register', {
+        fetch('http://127.0.0.1:4998/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json())
         .then(data => {
-            if (data.result === "申請成功") {
+            if (data.result == 1 || data.result === "1") {
                 alert('註冊成功！');
                 window.location.href = 'login.html';
             } else {
