@@ -39,15 +39,28 @@
     </div>
     <div class="container">
         <div class="user-profile">
-            <h2>我的資訊</h2>
-            <div id="userInfo">
-                <p><strong>賬號:</strong> <span id="userAccount">載入中...</span></p>
-                <p><strong>密碼:</strong> <span id="userPassword">載入中...</span></p>
-                <p><strong>姓名:</strong> <span id="userName">載入中...</span></p>
-                <p><strong>電子信箱:</strong> <span id="userEmail">載入中...</span></p>
-                <p><strong>地址:</strong> <span id="userAddress">載入中...</span></p>
-                <p><strong>電話:</strong> <span id="userPhone">載入中...</span></p>
-                <p><strong>性別:</strong> <span id="userSex">載入中...</span></p>
+            <h2>🙋‍♂️ 我的資訊</h2>
+            <div class="profile-content">
+                <div class="user-info">
+                    <h3>👤 個人資料</h3>
+                    <div id="userInfo">
+                        <p><strong>賬號:</strong> <span id="userAccount">載入中...</span></p>
+                        <p><strong>密碼:</strong> <span id="userPassword">載入中...</span></p>
+                        <p><strong>姓名:</strong> <span id="userName">載入中...</span></p>
+                        <p><strong>電子信箱:</strong> <span id="userEmail">載入中...</span></p>
+                        <p><strong>地址:</strong> <span id="userAddress">載入中...</span></p>
+                        <p><strong>電話:</strong> <span id="userPhone">載入中...</span></p>
+                        <p><strong>性別:</strong> <span id="userSex">載入中...</span></p>
+                    </div>
+                </div>
+                <div class="credit-card-info">
+                    <h3>💳 信用卡資訊</h3>
+                    <div id="creditCardInfo">
+                        <p><strong>卡號:</strong> <span id="cardNumber">**** **** **** ****</span></p>
+                        <p><strong>CVV:</strong> <span id="cvv">***</span></p>
+                    </div>
+                    <button id="changeCardBtn" onclick="handleChangeCard()">🔄 更換卡片</button>
+                </div>
             </div>
         </div>
     </div>
