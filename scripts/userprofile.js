@@ -1,7 +1,7 @@
 // Wait for the DOM to load before running the script
 document.addEventListener('DOMContentLoaded', (event) => {
     // Fetch user ID from localStorage
-    const userId = localStorage.getItem('user_id');
+    const userId = localStorage.getItem('userId');
 
     // Check if the user ID exists
     if (userId) {
@@ -32,5 +32,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
     } else {
         console.error('User ID not found in localStorage');
+    }
+
+    // Function to handle user logout
+    function handleLogoutUserButtonClick() {
+        // Set userId to zero in localStorage
+        localStorage.setItem('userId', '0');
+        // Redirect to home.html
+        window.location.href = 'home.html';
     }
 });
