@@ -1,5 +1,3 @@
-// Global variables to store credit card information
-let creditCards = [];
 
 // Function to handle user logout
 function handleLogoutUserButtonClick() {
@@ -74,7 +72,7 @@ function renderCreditCards() {
     .then(data => {
         const result = data.result;
         const creditCardInf = result[1];
-        creditCards = creditCardInf.map(card => ({
+        const creditCards = creditCardInf.map(card => ({
             number: card[0],
             cvv: card[1]
         }));
