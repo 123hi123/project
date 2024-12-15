@@ -27,6 +27,10 @@ function deleteCard(event) {
         },
         body: JSON.stringify({ userId, cardNumber }),
     })
+    .then(response => response.json())
+    .then(data => {
+        renderCreditCards();
+    })
     // setTimeout(() => {
     //     renderCreditCards();
     // }, 100); // 等待 0.1 秒
@@ -50,10 +54,15 @@ function addCard() {
             },
             body: JSON.stringify({ userId, cardNumber, cvv }),
         })
+        .then(response => response.json())
+        .then(data => {
+            renderCreditCards();
+        })
+
         // setTimeout(() => {
         //     renderCreditCards();
         // }, 100);
-        renderCreditCards();
+        
     }
 }
 
