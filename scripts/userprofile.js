@@ -39,7 +39,7 @@ async function deleteCard(event) {
 
         const data = await response.json();
 
-        if (data.success) {
+        if (data.result) {
             // 從 local creditCards 陣列中移除刪除的卡
             creditCards = creditCards.filter(card => card.number !== cardNumber);
             renderCreditCards();
@@ -77,7 +77,7 @@ async function addCard() {
 
         const data = await response.json();
 
-        if (data.success) {
+        if (data.result) {
             // 將新卡添加到 local creditCards 陣列
             creditCards.push({ number: cardNumber, cvv });
             renderCreditCards();
@@ -149,7 +149,7 @@ async function saveUserChanges() {
 
         const data = await response.json();
 
-        if (data.success) {
+        if (data) {
             alert('使用者資訊已成功更新');
         } else {
             alert('更新失敗，請稍後再試');
@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 // 假設 data.creditCardInf 是信用卡信息
                 if (creditCardInf) {
-                    creditCards = data.creditCardInf.map(card => ({
+                    creditCards = creditCardInf.map(card => ({
                         number: card[0],
                         cvv: card[1]
                     }));
