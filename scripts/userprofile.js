@@ -25,6 +25,12 @@ function handleLogoutUserButtonClick() {
     window.location.href = 'home.html';
 }
 
+let cart = JSON.parse(localStorage.getItem("cart"));
+if(!cart){
+    cart = {ProductNum : 0};
+}
+document.querySelector(".cart-num").innerHTML = cart.ProductNum
+
 // Wait for the DOM to load before running the script
 document.addEventListener('DOMContentLoaded', (event) => {
     // Fetch user ID from localStorage
