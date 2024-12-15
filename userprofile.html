@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>使用者資訊</title>
     <link rel="stylesheet" href="styles/userprofile.css">
-    <link rel="stylesheet" href="styles/components/header.css">
+    <link rel="stylesheet" href="styles/header.css">
 </head>
 <body>
     <div class="header">
@@ -55,11 +55,14 @@
                 </div>
                 <div class="card credit-card-info-card">
                     <h3>💳 信用卡資訊</h3>
-                    <div id="creditCardInfo">
-                        <p><strong>卡號:</strong> <span id="cardNumber">**** **** **** ****</span></p>
-                        <p><strong>CVV:</strong> <span id="cvv">***</span></p>
+                    <ul id="creditCardList" class="credit-card-list">
+                        <!-- Credit cards will be dynamically added here by JavaScript -->
+                    </ul>
+                    <div class="add-card-form">
+                        <input type="text" id="newCardNumber" placeholder="新卡號">
+                        <input type="text" id="newCardCVV" placeholder="新CVV">
+                        <button id="addCardButton" onclick="addCard()">新增信用卡</button>
                     </div>
-                    <button id="changeCardBtn" onclick="handleChangeCard()">🔄 更換卡片</button>
                 </div>
             </div>
         </div>

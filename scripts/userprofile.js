@@ -1,49 +1,107 @@
 // Global variables to store credit card information
 let creditCards = [];
-let currentCardIndex = 0;
-
-// Function to handle changing credit card information
-function handleChangeCard() {
-    if (creditCards.length === 0) {
-        document.getElementById('cardNumber').textContent = '還沒綁卡呢親';
-        document.getElementById('cvv').textContent = '還沒綁卡呢親';
-    } else {
-        // Increment the index, but reset to 0 if it's at the last card
-        currentCardIndex = (currentCardIndex + 1) % creditCards.length;
-
-        // Update the DOM with the new card information
-        document.getElementById('cardNumber').textContent = creditCards[currentCardIndex].number;
-        document.getElementById('cvv').textContent = creditCards[currentCardIndex].cvv;
-    }
-}
 
 // Function to handle user logout
 function handleLogoutUserButtonClick() {
-    // Set userId to zero in localStorage
     localStorage.setItem('userId', '0');
     let cart = {
-        ProductNum : 0,
-        TotalAmount : 0
+        ProductNum: 0,
+        TotalAmount: 0
     };
     localStorage.setItem("cart", JSON.stringify(cart));
-    // Redirect to home.html
     window.location.href = 'home.html';
 }
 
 let cart = JSON.parse(localStorage.getItem("cart"));
-if(!cart){
-    cart = {ProductNum : 0};
+if (!cart) {
+    cart = { ProductNum: 0 };
 }
-document.querySelector(".cart-num").innerHTML = cart.ProductNum
+document.querySelector(".cart-num").innerHTML = cart.ProductNum;
+
+// Function to delete a credit card
+function deleteCard(event) {
+    const cardNumber = event.target.closest('.credit-card-item').querySelector('.card-number').textContent;
+    const userId = localStorage.getItem('userId');
+    fetch('http://127.0.0.1:5000/deleteCredit', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, cardNumber }),
+    })
+    renderCreditCards();
+}
+
+// Function to add a new credit card
+function addCard() {
+    const cardNumberInput = document.getElementById('newCardNumber');
+    const cvvInput = document.getElementById('newCardCVV');
+    const cardNumber = cardNumberInput.value.trim();
+    const cvv = cvvInput.value.trim();
+    const userId = localStorage.getItem('userId');
+    // add card to the database
+
+    if (cardNumber && cvv) {
+        fetch('http://127.0.0.1:5000/addCredit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId, cardNumber, cvv }),
+        })
+        // creditCards.push({ number: cardNumber, cvv: cvv });
+        // cardNumberInput.value = '';
+        // cvvInput.value = '';
+        renderCreditCards();
+    }
+}
+
+// Function to render credit cards in the list
+function renderCreditCards() {
+    const creditCardList = document.getElementById('creditCardList');
+    creditCardList.innerHTML = '';
+    const userId = localStorage.getItem('userId');
+    fetch('http://127.0.0.1:5000/getUserImformation', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        const result = data.result;
+        const creditCardInf = result[1];
+        creditCards = creditCardInf.map(card => ({
+            number: card[0],
+            cvv: card[1]
+        }));
+    })
+    
+    if (creditCards.length === 0) {
+        const emptyMessage = document.createElement('li');
+        emptyMessage.textContent = '還沒綁卡呢親';
+        creditCardList.appendChild(emptyMessage);
+    } else {
+        creditCards.forEach((card, index) => {
+            const li = document.createElement('li');
+            li.className = 'credit-card-item';
+            li.innerHTML = `
+                <span class="card-number">${card.number}</span>
+                <span class="cvv">${card.cvv}</span>
+                <button class="delete-card-btn" onclick="deleteCard(event)">刪除</button>
+            `;
+            li.style.animation = `fadeIn 0.5s ease-out ${index * 0.1}s both`;
+            creditCardList.appendChild(li);
+        });
+    }
+}
 
 // Wait for the DOM to load before running the script
 document.addEventListener('DOMContentLoaded', (event) => {
-    // Fetch user ID from localStorage
     const userId = localStorage.getItem('userId');
-
-    // Check if the user ID exists
+    renderCreditCards();
     if (userId) {
-        // Fetch user data from the server
         fetch('http://127.0.0.1:5000/getUserImformation', {
             method: 'POST',
             headers: {
@@ -55,9 +113,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         .then(data => {
             const result = data.result;
             const userinf = result[0];
-            const creditCardInf = result[1]; // [[c1.num,c1.cvv],[c2.num,c2.cvv]]
 
-            // Update the DOM with the user information
             document.getElementById('userName').textContent = userinf[0] || '未提供';
             document.getElementById('userEmail').textContent = userinf[1] || '未提供';
             document.getElementById('userAddress').textContent = userinf[2] || '未提供';
@@ -66,14 +122,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             document.getElementById('userAccount').textContent = userinf[5] || '未提供';
             document.getElementById('userPassword').textContent = userinf[6] || '未提供';
 
-            // Store credit card information in the global array
-            creditCards = creditCardInf.map(card => ({
-                number: card[0],
-                cvv: card[1]
-            }));
-
-            // Initially display the first card or "還沒綁卡呢親" if no cards
-            handleChangeCard();
+            renderCreditCards();
         })
         .catch(error => {
             console.error('Error:', error);
@@ -81,4 +130,24 @@ document.addEventListener('DOMContentLoaded', (event) => {
     } else {
         console.error('User ID not found in localStorage');
     }
+
+    // Add event listener for the add card button
+    const addCardButton = document.getElementById('addCardButton');
+    addCardButton.addEventListener('click', addCard);
 });
+
+// Add this CSS to the head of the document for the animation
+const style = document.createElement('style');
+style.textContent = `
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+`;
+document.head.appendChild(style);

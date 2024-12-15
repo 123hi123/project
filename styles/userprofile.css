@@ -61,19 +61,68 @@ h2 {
     word-wrap: break-word;
 }
 
-#changeCardBtn {
-    margin-top: 20px;
-    padding: 10px 15px;
-    background-color: #007bff;
+.credit-card-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.credit-card-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.credit-card-item:last-child {
+    border-bottom: none;
+}
+
+.delete-card-btn {
+    background-color: #ff4d4d;
     color: white;
     border: none;
-    border-radius: 5px;
+    padding: 5px 10px;
+    border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-#changeCardBtn:hover {
-    background-color: #0056b3;
+.delete-card-btn:hover {
+    background-color: #ff1a1a;
+}
+
+.add-card-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.add-card-item input {
+    flex: 1;
+    margin-right: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#addCardButton {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#addCardButton:hover {
+    background-color: #45a049;
 }
 
 @media (max-width: 768px) {
