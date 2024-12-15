@@ -138,7 +138,6 @@ function saveUserChanges() {
 // Wait for the DOM to load before running the script
 document.addEventListener('DOMContentLoaded', (event) => {
     const userId = localStorage.getItem('userId');
-    renderCreditCards();
     if (userId) {
         fetch('http://127.0.0.1:5000/getUserImformation', {
             method: 'POST',
@@ -169,23 +168,23 @@ document.addEventListener('DOMContentLoaded', (event) => {
         console.error('User ID not found in localStorage');
     }
 
-    // Add event listener for the add card button
-    const addCardButton = document.getElementById('addCardButton');
-    addCardButton.addEventListener('click', addCard);
+    // // Add event listener for the add card button
+    // const addCardButton = document.getElementById('addCardButton');
+    // addCardButton.addEventListener('click', addCard);
 });
 
-// Add this CSS to the head of the document for the animation
-const style = document.createElement('style');
-style.textContent = `
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-`;
-document.head.appendChild(style);
+// // Add this CSS to the head of the document for the animation
+// const style = document.createElement('style');
+// style.textContent = `
+// @keyframes fadeIn {
+//     from {
+//         opacity: 0;
+//         transform: translateY(20px);
+//     }
+//     to {
+//         opacity: 1;
+//         transform: translateY(0);
+//     }
+// }
+// `;
+// document.head.appendChild(style);
