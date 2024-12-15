@@ -21,6 +21,11 @@ function handleChangeCard() {
 function handleLogoutUserButtonClick() {
     // Set userId to zero in localStorage
     localStorage.setItem('userId', '0');
+    let cart = {
+        ProductNum : 0,
+        TotalAmount : 0
+    };
+    localStorage.setItem("cart", JSON.stringify(cart));
     // Redirect to home.html
     window.location.href = 'home.html';
 }
