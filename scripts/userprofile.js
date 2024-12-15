@@ -23,8 +23,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
             document.getElementById('userEmail').textContent = userinf[1] || '未提供';
             document.getElementById('userAddress').textContent = userinf[2] || '未提供';
             document.getElementById('userPhone').textContent = userinf[3] || '未提供';
-            document.getElementById('userSex').textContent = userinf.U[4] || '未提供';
-            document.getElementById('userAccount').textContent = userinf.U[5] || '未提供';
+            document.getElementById('userSex').textContent = userinf[4] || '未提供';
+            document.getElementById('userAccount').textContent = userinf[5] || '未提供';
             document.getElementById('userPassword').textContent = userinf[6] || '未提供';
         })
         .catch(error => {
