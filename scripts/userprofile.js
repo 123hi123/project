@@ -29,7 +29,10 @@ function deleteCard(event) {
         },
         body: JSON.stringify({ userId, cardNumber }),
     })
-    renderCreditCards();
+    setTimeout(() => {
+        renderCreditCards();
+    }, 100); // 等待 0.1 秒
+    // renderCreditCards();
 }
 
 // Function to add a new credit card
@@ -49,10 +52,9 @@ function addCard() {
             },
             body: JSON.stringify({ userId, cardNumber, cvv }),
         })
-        // creditCards.push({ number: cardNumber, cvv: cvv });
-        // cardNumberInput.value = '';
-        // cvvInput.value = '';
-        renderCreditCards();
+        setTimeout(() => {
+            renderCreditCards();
+        }, 100);
     }
 }
 
@@ -76,25 +78,63 @@ function renderCreditCards() {
             number: card[0],
             cvv: card[1]
         }));
+        if (creditCards.length === 0) {
+            const emptyMessage = document.createElement('li');
+            emptyMessage.textContent = '還沒綁卡呢親';
+            creditCardList.appendChild(emptyMessage);
+        } else {
+            creditCards.forEach((card, index) => {
+                const li = document.createElement('li');
+                li.className = 'credit-card-item';
+                li.innerHTML = `
+                    <span class="card-number">${card.number}</span>
+                    <span class="cvv">${card.cvv}</span>
+                    <button class="delete-card-btn" onclick="deleteCard(event)">刪除</button>
+                `;
+                li.style.animation = `fadeIn 0.5s ease-out ${index * 0.1}s both`;
+                creditCardList.appendChild(li);
+            });
+        }
+    })    
+}
+
+// Function to save user changes
+function saveUserChanges() {
+    const userId = localStorage.getItem('userId');
+    const userPassword = document.getElementById('userPassword').value;
+    const userName = document.getElementById('userName').value;
+    const userEmail = document.getElementById('userEmail').value;
+    const userAddress = document.getElementById('userAddress').value;
+    const userPhone = document.getElementById('userPhone').value;
+    const userSex = document.getElementById('userSex').value;
+
+    fetch('http://127.0.0.1:5000/updateUserInformation', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            userId,
+            password: userPassword,
+            name: userName,
+            email: userEmail,
+            address: userAddress,
+            phone: userPhone,
+            sex: userSex
+        }),
     })
-    
-    if (creditCards.length === 0) {
-        const emptyMessage = document.createElement('li');
-        emptyMessage.textContent = '還沒綁卡呢親';
-        creditCardList.appendChild(emptyMessage);
-    } else {
-        creditCards.forEach((card, index) => {
-            const li = document.createElement('li');
-            li.className = 'credit-card-item';
-            li.innerHTML = `
-                <span class="card-number">${card.number}</span>
-                <span class="cvv">${card.cvv}</span>
-                <button class="delete-card-btn" onclick="deleteCard(event)">刪除</button>
-            `;
-            li.style.animation = `fadeIn 0.5s ease-out ${index * 0.1}s both`;
-            creditCardList.appendChild(li);
-        });
-    }
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('使用者資訊已成功更新');
+        } else {
+            alert('更新失敗，請稍後再試');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('更新時發生錯誤，請稍後再試');
+    });
 }
 
 // Wait for the DOM to load before running the script
@@ -114,13 +154,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
             const result = data.result;
             const userinf = result[0];
 
-            document.getElementById('userName').textContent = userinf[0] || '未提供';
-            document.getElementById('userEmail').textContent = userinf[1] || '未提供';
-            document.getElementById('userAddress').textContent = userinf[2] || '未提供';
-            document.getElementById('userPhone').textContent = userinf[3] || '未提供';
-            document.getElementById('userSex').textContent = userinf[4] || '未提供';
+            document.getElementById('userName').value = userinf[0] || '';
+            document.getElementById('userEmail').value = userinf[1] || '';
+            document.getElementById('userAddress').value = userinf[2] || '';
+            document.getElementById('userPhone').value = userinf[3] || '';
+            document.getElementById('userSex').value = userinf[4] || '其他';
             document.getElementById('userAccount').textContent = userinf[5] || '未提供';
-            document.getElementById('userPassword').textContent = userinf[6] || '未提供';
+            document.getElementById('userPassword').value = userinf[6] || '';
 
             renderCreditCards();
         })
