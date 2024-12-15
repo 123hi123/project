@@ -20,17 +20,17 @@ document.querySelector(".cart-num").innerHTML = cart.ProductNum;
 function deleteCard(event) {
     const cardNumber = event.target.closest('.credit-card-item').querySelector('.card-number').textContent;
     const userId = localStorage.getItem('userId');
-    fetch('http://127.0.0.1:5000/deleteCredit', {
+    fetch('http://127.0.0.1:5000/deleteCreditCard', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ userId, cardNumber }),
     })
-    setTimeout(() => {
-        renderCreditCards();
-    }, 100); // 等待 0.1 秒
-    // renderCreditCards();
+    // setTimeout(() => {
+    //     renderCreditCards();
+    // }, 100); // 等待 0.1 秒
+    renderCreditCards();
 }
 
 // Function to add a new credit card
@@ -43,16 +43,17 @@ function addCard() {
     // add card to the database
 
     if (cardNumber && cvv) {
-        fetch('http://127.0.0.1:5000/addCredit', {
+        fetch('http://127.0.0.1:5000/addCreditCard', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ userId, cardNumber, cvv }),
         })
-        setTimeout(() => {
-            renderCreditCards();
-        }, 100);
+        // setTimeout(() => {
+        //     renderCreditCards();
+        // }, 100);
+        renderCreditCards();
     }
 }
 
