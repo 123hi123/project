@@ -3,8 +3,8 @@ let isEditMode = false;
 let originalUserData = {};
 
 // Set a fixed user ID for testing
-// let userId = localStorage.getItem('userId');
-let userId = '1';
+let userId = localStorage.getItem('userId');
+// let userId = '1';
 // now is test mode
 
 // Function to handle user logout
@@ -44,7 +44,7 @@ async function deleteCard(event) {
         });
 
         const data = await response.json();
-
+        // alert(data.result);
         if (data.result) {
             creditCards = creditCards.filter(card => card.number !== cardNumber);
             renderCreditCards();
@@ -182,10 +182,10 @@ function validateUserInput() {
         isValid = false;
     }
 
-    if (!address) {
-        displayErrorMessage('addressError', '請輸入地址');
-        isValid = false;
-    }
+    // if (!address) {
+    //     displayErrorMessage('addressError', '請輸入地址');
+    //     isValid = false;
+    // }
 
     if (!phone) {
         displayErrorMessage('phoneError', '請輸入電話號碼');
@@ -203,7 +203,7 @@ function displayErrorMessage(elementId, message) {
     const errorElement = document.getElementById(elementId);
     errorElement.textContent = message;
     errorElement.style.display = 'block';
-    document.getElementById(elementId.replace('Error', '')).classList.add('invalid-input');
+    // document.getElementById(elementId.replace('Error', '')).classList.add('invalid-input');
 }
 
 // Function to clear error messages
@@ -236,14 +236,15 @@ async function saveUserChanges() {
     if (!validateUserInput()) {
         return;
     }
+    showPasswordVerificationModal();
+    return;
+    // const newPassword = document.getElementById('userPassword').value;
+    // if (newPassword !== originalUserData.password) {
+    //     showPasswordVerificationModal();
+    //     return;
+    // }
 
-    const newPassword = document.getElementById('userPassword').value;
-    if (newPassword !== originalUserData.password) {
-        showPasswordVerificationModal();
-        return;
-    }
-
-    await updateUserInformation();
+    // await updateUserInformation();
 }
 
 // Function to show password verification modal
@@ -263,7 +264,7 @@ async function verifyOldPassword() {
         closePasswordVerificationModal();
         await updateUserInformation();
     } else {
-        alert('舊密碼驗證失敗，無法更改密碼。');
+        alert('密碼驗證失敗，無法保存。');
         closePasswordVerificationModal();
     }
 }
@@ -295,8 +296,7 @@ async function updateUserInformation() {
         });
 
         const data = await response.json();
-
-        if (data) {
+        if (data.result) {
             alert('使用者資訊已成功更新');
             
             // Update originalUserData here
@@ -361,7 +361,6 @@ function clearErrorMessage(errorId) {
     const errorElement = document.getElementById(errorId);
     errorElement.textContent = '';
     errorElement.style.display = 'none';
-    document.getElementById(errorId.replace('Error', '')).classList.remove('invalid-input');
 }
 
 // Function to toggle password visibility
@@ -380,7 +379,6 @@ function togglePasswordVisibility(inputId, buttonId) {
 
 // Event listeners for password visibility toggle
 document.getElementById('togglePassword').addEventListener('click', () => togglePasswordVisibility('userPassword', 'togglePassword'));
-// document.getElementById('toggleOldPassword').addEventListener('click', () => togglePasswordVisibility('oldPasswordInput', 'toggleOldPassword'));
 
 // Wait for the DOM to load before running the script
 document.addEventListener('DOMContentLoaded', async () => {
@@ -396,6 +394,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const data = await response.json();
             const result = data.result;
+            // alert(result);
 
             if (result && result.length > 0) {
                 const userinf = result[0];
@@ -431,6 +430,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     } else {
         console.error('User ID is 0 or not set.');
+        window.location.href = 'not_logged_in.html';
     }
 });
 
