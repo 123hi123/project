@@ -2,6 +2,11 @@ let creditCards = []; // 全局變數，用於存儲信用卡列表
 let isEditMode = false;
 let originalUserData = {};
 
+// Set a fixed user ID for testing
+// let userId = localStorage.getItem('userId');
+let userId = '1';
+// now is test mode
+
 // Function to handle user logout
 function handleLogoutUserButtonClick() {
     localStorage.setItem('userId', '0');
@@ -23,7 +28,6 @@ document.querySelector(".cart-num").innerHTML = cart.ProductNum;
 async function deleteCard(event) {
     const cardItem = event.target.closest('.credit-card-item');
     const cardNumber = cardItem.querySelector('.card-number').textContent;
-    const userId = localStorage.getItem('userId');
 
     const confirmDelete = confirm(`確定要刪除卡號 ${cardNumber} 嗎？`);
     if (!confirmDelete) {
@@ -60,7 +64,6 @@ async function addCard() {
     const cvvInput = document.getElementById('newCardCVV');
     const cardNumber = cardNumberInput.value.trim();
     const cvv = cvvInput.value.trim();
-    const userId = localStorage.getItem('userId');
 
     if (!cardNumber || !cvv) {
         alert('請填寫完整的卡號和 CVV。');
@@ -134,6 +137,7 @@ function toggleEditMode() {
         saveBtn.style.display = 'inline-block';
         cancelBtn.style.display = 'inline-block';
         document.getElementById('userAccountEdit').textContent = document.getElementById('userAccount').textContent;
+        document.getElementById('userPassword').value = originalUserData.password;
     } else {
         userInfo.style.display = 'block';
         userInfoEdit.style.display = 'none';
@@ -147,29 +151,125 @@ function toggleEditMode() {
 function cancelChanges() {
     populateUserInfo(originalUserData);
     toggleEditMode();
+    clearErrorMessages();
 }
 
-// Function to verify password change
-function verifyPasswordChange() {
-    const newPassword = document.getElementById('userPassword').value;
-    if (newPassword !== originalUserData.password) {
-        const currentPassword = prompt('請輸入舊密碼以驗證身份：');
-        if (currentPassword !== originalUserData.password) {
-            alert('密碼驗證失敗，無法更改密碼。');
-            document.getElementById('userPassword').value = originalUserData.password;
-            return false;
-        }
+// Function to validate user input
+function validateUserInput() {
+    let isValid = true;
+    clearErrorMessages();
+
+    const password = document.getElementById('userPassword').value;
+    const name = document.getElementById('userName').value;
+    const email = document.getElementById('userEmail').value;
+    const address = document.getElementById('userAddress').value;
+    const phone = document.getElementById('userPhone').value;
+    if (!password) {
+        displayErrorMessage('passwordError', '請輸入密碼');
+        isValid = false;
     }
-    return true;
+
+    if (!name) {
+        displayErrorMessage('nameError', '請輸入姓名');
+        isValid = false;
+    }
+
+    if (!email) {
+        displayErrorMessage('emailError', '請輸入電子信箱');
+        isValid = false;
+    } else if (!isValidEmail(email)) {
+        displayErrorMessage('emailError', '請輸入有效的電子信箱');
+        isValid = false;
+    }
+
+    if (!address) {
+        displayErrorMessage('addressError', '請輸入地址');
+        isValid = false;
+    }
+
+    if (!phone) {
+        displayErrorMessage('phoneError', '請輸入電話號碼');
+        isValid = false;
+    } else if (!isValidPhone(phone)) {
+        displayErrorMessage('phoneError', '請輸入有效的電話號碼');
+        isValid = false;
+    }
+
+    return isValid;
+}
+
+// Function to display error message
+function displayErrorMessage(elementId, message) {
+    const errorElement = document.getElementById(elementId);
+    errorElement.textContent = message;
+    errorElement.style.display = 'block';
+    document.getElementById(elementId.replace('Error', '')).classList.add('invalid-input');
+}
+
+// Function to clear error messages
+function clearErrorMessages() {
+    const errorElements = document.getElementsByClassName('error-message');
+    for (let element of errorElements) {
+        element.textContent = '';
+        element.style.display = 'none';
+    }
+    const inputElements = document.querySelectorAll('#userInfoEdit input');
+    for (let element of inputElements) {
+        element.classList.remove('invalid-input');
+    }
+}
+
+// Function to validate email format
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+// Function to validate phone number format
+function isValidPhone(phone) {
+    const phoneRegex = /^[0-9]{10}$/;
+    return phoneRegex.test(phone);
 }
 
 // Function to save user changes
 async function saveUserChanges() {
-    if (!verifyPasswordChange()) {
+    if (!validateUserInput()) {
         return;
     }
 
-    const userId = localStorage.getItem('userId');
+    const newPassword = document.getElementById('userPassword').value;
+    if (newPassword !== originalUserData.password) {
+        showPasswordVerificationModal();
+        return;
+    }
+
+    await updateUserInformation();
+}
+
+// Function to show password verification modal
+function showPasswordVerificationModal() {
+    document.getElementById('passwordVerificationModal').style.display = 'block';
+}
+
+// Function to close password verification modal
+function closePasswordVerificationModal() {
+    document.getElementById('passwordVerificationModal').style.display = 'none';
+}
+
+// Function to verify old password
+async function verifyOldPassword() {
+    const oldPassword = document.getElementById('oldPasswordInput').value;
+    if (oldPassword === originalUserData.password) {
+        closePasswordVerificationModal();
+        await updateUserInformation();
+    } else {
+        alert('舊密碼驗證失敗，無法更改密碼。');
+        closePasswordVerificationModal();
+    }
+}
+
+// Function to update user information
+async function updateUserInformation() {
     const userPassword = document.getElementById('userPassword').value;
     const userName = document.getElementById('userName').value;
     const userEmail = document.getElementById('userEmail').value;
@@ -198,6 +298,18 @@ async function saveUserChanges() {
 
         if (data) {
             alert('使用者資訊已成功更新');
+            
+            // Update originalUserData here
+            originalUserData = {
+                ...originalUserData, // Keep other data
+                password: userPassword,
+                name: userName,
+                email: userEmail,
+                address: userAddress,
+                phone: userPhone,
+                sex: userSex,
+            };
+
             updateDisplayFields();
             toggleEditMode();
         } else {
@@ -238,9 +350,40 @@ function populateUserInfo(userinf) {
     document.getElementById('userSex').value = userinf.sex || '其他';
 }
 
+// Event listeners for real-time error message removal
+document.getElementById('userName').addEventListener('input', () => clearErrorMessage('nameError'));
+document.getElementById('userEmail').addEventListener('input', () => clearErrorMessage('emailError'));
+document.getElementById('userAddress').addEventListener('input', () => clearErrorMessage('addressError'));
+document.getElementById('userPhone').addEventListener('input', () => clearErrorMessage('phoneError'));
+
+// Function to clear a specific error message
+function clearErrorMessage(errorId) {
+    const errorElement = document.getElementById(errorId);
+    errorElement.textContent = '';
+    errorElement.style.display = 'none';
+    document.getElementById(errorId.replace('Error', '')).classList.remove('invalid-input');
+}
+
+// Function to toggle password visibility
+function togglePasswordVisibility(inputId, buttonId) {
+    const passwordInput = document.getElementById(inputId);
+    const toggleButton = document.getElementById(buttonId);
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleButton.textContent = '隱藏密碼';
+    } else {
+        passwordInput.type = 'password';
+        toggleButton.textContent = '顯示密碼';
+    }
+}
+
+// Event listeners for password visibility toggle
+document.getElementById('togglePassword').addEventListener('click', () => togglePasswordVisibility('userPassword', 'togglePassword'));
+// document.getElementById('toggleOldPassword').addEventListener('click', () => togglePasswordVisibility('oldPasswordInput', 'toggleOldPassword'));
+
 // Wait for the DOM to load before running the script
 document.addEventListener('DOMContentLoaded', async () => {
-    const userId = localStorage.getItem('userId');
     if (userId && userId !== '0') {
         try {
             const response = await fetch('http://127.0.0.1:5000/getUserImformation', {
@@ -287,7 +430,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error('Error:', error);
         }
     } else {
-        console.error('User ID not found in localStorage or is 0.');
+        console.error('User ID is 0 or not set.');
     }
 });
 

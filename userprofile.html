@@ -54,11 +54,28 @@
                     </div>
                     <div id="userInfoEdit" style="display: none;">
                         <p><strong>賬號:</strong> <span id="userAccountEdit"></span></p>
-                        <p><strong>密碼:</strong> <input type="password" id="userPassword"></p>
-                        <p><strong>姓名:</strong> <input type="text" id="userName"></p>
-                        <p><strong>電子信箱:</strong> <input type="email" id="userEmail"></p>
-                        <p><strong>地址:</strong> <input type="text" id="userAddress"></p>
-                        <p><strong>電話:</strong> <input type="tel" id="userPhone"></p>
+                        <p>
+                            <strong>密碼:</strong>
+                            <input type="password" id="userPassword">
+                            <button type="button" id="togglePassword">顯示/隱藏密碼</button>
+                            <span class="error-message" id="passwordError"></span>
+                        </p>
+                        <p>
+                            <strong>姓名:</strong> <input type="text" id="userName">
+                            <span class="error-message" id="nameError"></span>
+                        </p>
+                        <p>
+                            <strong>電子信箱:</strong> <input type="email" id="userEmail">
+                            <span class="error-message" id="emailError"></span>
+                        </p>
+                        <p>
+                            <strong>地址:</strong> <input type="text" id="userAddress">
+                            <span class="error-message" id="addressError"></span>
+                        </p>
+                        <p>
+                            <strong>電話:</strong> <input type="tel" id="userPhone">
+                            <span class="error-message" id="phoneError"></span>
+                        </p>
                         <p><strong>性別:</strong> 
                             <select id="userSex">
                                 <option value="男">男</option>
@@ -83,6 +100,17 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <!-- Modal for old password verification -->
+    <div id="passwordVerificationModal" class="modal">
+        <div class="modal-content">
+            <h3>驗證舊密碼</h3>
+            <p>為了安全起見，請輸入舊密碼以確認身份：</p>
+            <input type="text" id="oldPasswordInput">
+            <!-- <button type="button" id="toggleOldPassword">顯示/隱藏密碼</button> -->
+            <button onclick="verifyOldPassword()">確認</button>
+            <button onclick="closePasswordVerificationModal()">取消</button>
         </div>
     </div>
     <script src="scripts/userprofile.js"></script>
