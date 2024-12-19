@@ -125,6 +125,30 @@ h2 {
     background-color: #45a049;
 }
 
+/* New styles for edit and save buttons */
+#editUserInfoBtn, #saveUserInfoBtn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 15px;
+}
+
+#editUserInfoBtn:hover, #saveUserInfoBtn:hover {
+    background-color: #0056b3;
+}
+
+#saveUserInfoBtn {
+    background-color: #28a745;
+}
+
+#saveUserInfoBtn:hover {
+    background-color: #218838;
+}
+
 @media (max-width: 768px) {
     .profile-content {
         flex-direction: column;
