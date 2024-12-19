@@ -1,5 +1,6 @@
 let creditCards = []; // 全局變數，用於存儲信用卡列表
 let isEditMode = false;
+let originalPassword = '';
 
 // Function to handle user logout
 function handleLogoutUserButtonClick() {
@@ -120,56 +121,65 @@ function renderCreditCards() {
 // Function to toggle edit mode
 function toggleEditMode() {
     isEditMode = !isEditMode;
+    const inputs = document.querySelectorAll('#userInfo input, #userInfo select');
     const editBtn = document.getElementById('editUserInfoBtn');
     const saveBtn = document.getElementById('saveUserInfoBtn');
-    const userInfo = document.getElementById('userInfo');
+
+    inputs.forEach(input => {
+        if (input.id === 'userPassword') {
+            input.type = isEditMode ? 'text' : 'password';
+        }
+        input.readOnly = !isEditMode;
+        input.disabled = !isEditMode;
+        if (isEditMode) {
+            input.addEventListener('focus', selectInputContent);
+        } else {
+            input.removeEventListener('focus', selectInputContent);
+        }
+    });
+
+    editBtn.style.display = isEditMode ? 'none' : 'inline-block';
+    saveBtn.style.display = isEditMode ? 'inline-block' : 'none';
 
     if (isEditMode) {
-        editBtn.style.display = 'none';
-        saveBtn.style.display = 'inline-block';
-        userInfo.querySelectorAll('span:not(#userAccount)').forEach(span => {
-            const input = document.createElement('input');
-            input.type = span.id === 'userPassword' ? 'password' : 'text';
-            input.value = span.textContent;
-            input.id = span.id + 'Input';
-            span.parentNode.replaceChild(input, span);
-        });
-        
-        // Handle gender separately
-        const sexSpan = document.getElementById('userSex');
-        const sexSelect = document.createElement('select');
-        sexSelect.id = 'userSexInput';
-        ['男', '女', '其他'].forEach(option => {
-            const optionElement = document.createElement('option');
-            optionElement.value = option;
-            optionElement.textContent = option;
-            if (option === sexSpan.textContent) {
-                optionElement.selected = true;
-            }
-            sexSelect.appendChild(optionElement);
-        });
-        sexSpan.parentNode.replaceChild(sexSelect, sexSpan);
+        originalPassword = document.getElementById('userPassword').value;
     } else {
-        editBtn.style.display = 'inline-block';
-        saveBtn.style.display = 'none';
-        userInfo.querySelectorAll('input, select').forEach(input => {
-            const span = document.createElement('span');
-            span.id = input.id.replace('Input', '');
-            span.textContent = input.value;
-            input.parentNode.replaceChild(span, input);
-        });
+        document.getElementById('userPassword').value = originalPassword;
     }
+}
+
+// Function to auto-select input content
+function selectInputContent(event) {
+    event.target.select();
+}
+
+// Function to verify password change
+function verifyPasswordChange() {
+    const newPassword = document.getElementById('userPassword').value;
+    if (newPassword !== originalPassword) {
+        const currentPassword = prompt('請輸入舊密碼以驗證身份：');
+        if (currentPassword !== originalPassword) {
+            alert('密碼驗證失敗，無法更改密碼。');
+            document.getElementById('userPassword').value = originalPassword;
+            return false;
+        }
+    }
+    return true;
 }
 
 // Function to save user changes
 async function saveUserChanges() {
+    if (!verifyPasswordChange()) {
+        return;
+    }
+
     const userId = localStorage.getItem('userId');
-    const userPassword = document.getElementById('userPasswordInput').value;
-    const userName = document.getElementById('userNameInput').value;
-    const userEmail = document.getElementById('userEmailInput').value;
-    const userAddress = document.getElementById('userAddressInput').value;
-    const userPhone = document.getElementById('userPhoneInput').value;
-    const userSex = document.getElementById('userSexInput').value;
+    const userPassword = document.getElementById('userPassword').value;
+    const userName = document.getElementById('userName').value;
+    const userEmail = document.getElementById('userEmail').value;
+    const userAddress = document.getElementById('userAddress').value;
+    const userPhone = document.getElementById('userPhone').value;
+    const userSex = document.getElementById('userSex').value;
 
     try {
         const response = await fetch('http://127.0.0.1:5000/updateUserInformation', {
@@ -192,7 +202,7 @@ async function saveUserChanges() {
 
         if (data) {
             alert('使用者資訊已成功更新');
-            toggleEditMode(); // Exit edit mode
+            toggleEditMode();
         } else {
             alert('更新失敗，請稍後再試');
         }
@@ -222,13 +232,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const userinf = result[0];
                 const creditCardInf = result[1];
 
-                document.getElementById('userName').textContent = userinf[0] || '';
-                document.getElementById('userEmail').textContent = userinf[1] || '';
-                document.getElementById('userAddress').textContent = userinf[2] || '';
-                document.getElementById('userPhone').textContent = userinf[3] || '';
-                document.getElementById('userSex').textContent = userinf[4] || '其他';
+                document.getElementById('userName').value = userinf[0] || '';
+                document.getElementById('userEmail').value = userinf[1] || '';
+                document.getElementById('userAddress').value = userinf[2] || '';
+                document.getElementById('userPhone').value = userinf[3] || '';
+                document.getElementById('userSex').value = userinf[4] || '其他';
                 document.getElementById('userAccount').textContent = userinf[5] || '未提供';
-                document.getElementById('userPassword').textContent = '********'; // For security reasons
+                document.getElementById('userPassword').value = userinf[6] || '';
+                originalPassword = userinf[6] || '';
 
                 if (creditCardInf) {
                     creditCards = creditCardInf.map(card => ({
@@ -251,7 +262,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// 添加 CSS 動畫到頭部
+// Add CSS animation to head
 const style = document.createElement('style');
 style.textContent = `
 @keyframes fadeIn {
