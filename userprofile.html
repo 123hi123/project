@@ -45,13 +45,22 @@
                     <h3>👤 個人資料</h3>
                     <div id="userInfo">
                         <p><strong>賬號:</strong> <span id="userAccount">載入中...</span></p>
-                        <p><strong>密碼:</strong> <input type="password" id="userPassword" value="載入中..." readonly></p>
-                        <p><strong>姓名:</strong> <input type="text" id="userName" value="載入中..." readonly></p>
-                        <p><strong>電子信箱:</strong> <input type="email" id="userEmail" value="載入中..." readonly></p>
-                        <p><strong>地址:</strong> <input type="text" id="userAddress" value="載入中..." readonly></p>
-                        <p><strong>電話:</strong> <input type="tel" id="userPhone" value="載入中..." readonly></p>
+                        <p><strong>密碼:</strong> <span id="passwordDisplay">********</span></p>
+                        <p><strong>姓名:</strong> <span id="nameDisplay">載入中...</span></p>
+                        <p><strong>電子信箱:</strong> <span id="emailDisplay">載入中...</span></p>
+                        <p><strong>地址:</strong> <span id="addressDisplay">載入中...</span></p>
+                        <p><strong>電話:</strong> <span id="phoneDisplay">載入中...</span></p>
+                        <p><strong>性別:</strong> <span id="sexDisplay">載入中...</span></p>
+                    </div>
+                    <div id="userInfoEdit" style="display: none;">
+                        <p><strong>賬號:</strong> <span id="userAccountEdit"></span></p>
+                        <p><strong>密碼:</strong> <input type="password" id="userPassword"></p>
+                        <p><strong>姓名:</strong> <input type="text" id="userName"></p>
+                        <p><strong>電子信箱:</strong> <input type="email" id="userEmail"></p>
+                        <p><strong>地址:</strong> <input type="text" id="userAddress"></p>
+                        <p><strong>電話:</strong> <input type="tel" id="userPhone"></p>
                         <p><strong>性別:</strong> 
-                            <select id="userSex" disabled>
+                            <select id="userSex">
                                 <option value="男">男</option>
                                 <option value="女">女</option>
                                 <option value="其他">其他</option>
@@ -60,6 +69,7 @@
                     </div>
                     <button id="editUserInfoBtn" onclick="toggleEditMode()">編輯資料</button>
                     <button id="saveUserInfoBtn" onclick="saveUserChanges()" style="display: none;">儲存更改</button>
+                    <button id="cancelUserInfoBtn" onclick="cancelChanges()" style="display: none;">取消更改</button>
                 </div>
                 <div class="card credit-card-info-card">
                     <h3>💳 信用卡資訊</h3>

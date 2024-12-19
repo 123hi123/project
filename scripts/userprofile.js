@@ -1,6 +1,6 @@
 let creditCards = []; // 全局變數，用於存儲信用卡列表
 let isEditMode = false;
-let originalPassword = '';
+let originalUserData = {};
 
 // Function to handle user logout
 function handleLogoutUserButtonClick() {
@@ -121,46 +121,42 @@ function renderCreditCards() {
 // Function to toggle edit mode
 function toggleEditMode() {
     isEditMode = !isEditMode;
-    const inputs = document.querySelectorAll('#userInfo input, #userInfo select');
+    const userInfo = document.getElementById('userInfo');
+    const userInfoEdit = document.getElementById('userInfoEdit');
     const editBtn = document.getElementById('editUserInfoBtn');
     const saveBtn = document.getElementById('saveUserInfoBtn');
-
-    inputs.forEach(input => {
-        if (input.id === 'userPassword') {
-            input.type = isEditMode ? 'text' : 'password';
-        }
-        input.readOnly = !isEditMode;
-        input.disabled = !isEditMode;
-        if (isEditMode) {
-            input.addEventListener('focus', selectInputContent);
-        } else {
-            input.removeEventListener('focus', selectInputContent);
-        }
-    });
-
-    editBtn.style.display = isEditMode ? 'none' : 'inline-block';
-    saveBtn.style.display = isEditMode ? 'inline-block' : 'none';
+    const cancelBtn = document.getElementById('cancelUserInfoBtn');
 
     if (isEditMode) {
-        originalPassword = document.getElementById('userPassword').value;
+        userInfo.style.display = 'none';
+        userInfoEdit.style.display = 'block';
+        editBtn.style.display = 'none';
+        saveBtn.style.display = 'inline-block';
+        cancelBtn.style.display = 'inline-block';
+        document.getElementById('userAccountEdit').textContent = document.getElementById('userAccount').textContent;
     } else {
-        document.getElementById('userPassword').value = originalPassword;
+        userInfo.style.display = 'block';
+        userInfoEdit.style.display = 'none';
+        editBtn.style.display = 'inline-block';
+        saveBtn.style.display = 'none';
+        cancelBtn.style.display = 'none';
     }
 }
 
-// Function to auto-select input content
-function selectInputContent(event) {
-    event.target.select();
+// Function to cancel changes
+function cancelChanges() {
+    populateUserInfo(originalUserData);
+    toggleEditMode();
 }
 
 // Function to verify password change
 function verifyPasswordChange() {
     const newPassword = document.getElementById('userPassword').value;
-    if (newPassword !== originalPassword) {
+    if (newPassword !== originalUserData.password) {
         const currentPassword = prompt('請輸入舊密碼以驗證身份：');
-        if (currentPassword !== originalPassword) {
+        if (currentPassword !== originalUserData.password) {
             alert('密碼驗證失敗，無法更改密碼。');
-            document.getElementById('userPassword').value = originalPassword;
+            document.getElementById('userPassword').value = originalUserData.password;
             return false;
         }
     }
@@ -202,6 +198,7 @@ async function saveUserChanges() {
 
         if (data) {
             alert('使用者資訊已成功更新');
+            updateDisplayFields();
             toggleEditMode();
         } else {
             alert('更新失敗，請稍後再試');
@@ -210,6 +207,35 @@ async function saveUserChanges() {
         console.error('Error:', error);
         alert('更新時發生錯誤，請稍後再試');
     }
+}
+
+// Function to update display fields
+function updateDisplayFields() {
+    document.getElementById('passwordDisplay').textContent = '********';
+    document.getElementById('nameDisplay').textContent = document.getElementById('userName').value;
+    document.getElementById('emailDisplay').textContent = document.getElementById('userEmail').value;
+    document.getElementById('addressDisplay').textContent = document.getElementById('userAddress').value;
+    document.getElementById('phoneDisplay').textContent = document.getElementById('userPhone').value;
+    document.getElementById('sexDisplay').textContent = document.getElementById('userSex').value;
+}
+
+// Function to populate user info
+function populateUserInfo(userinf) {
+    document.getElementById('userAccount').textContent = userinf.account || '未提供';
+    document.getElementById('passwordDisplay').textContent = '********';
+    document.getElementById('nameDisplay').textContent = userinf.name || '';
+    document.getElementById('emailDisplay').textContent = userinf.email || '';
+    document.getElementById('addressDisplay').textContent = userinf.address || '';
+    document.getElementById('phoneDisplay').textContent = userinf.phone || '';
+    document.getElementById('sexDisplay').textContent = userinf.sex || '其他';
+
+    document.getElementById('userAccountEdit').textContent = userinf.account || '未提供';
+    document.getElementById('userPassword').value = userinf.password || '';
+    document.getElementById('userName').value = userinf.name || '';
+    document.getElementById('userEmail').value = userinf.email || '';
+    document.getElementById('userAddress').value = userinf.address || '';
+    document.getElementById('userPhone').value = userinf.phone || '';
+    document.getElementById('userSex').value = userinf.sex || '其他';
 }
 
 // Wait for the DOM to load before running the script
@@ -232,14 +258,17 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const userinf = result[0];
                 const creditCardInf = result[1];
 
-                document.getElementById('userName').value = userinf[0] || '';
-                document.getElementById('userEmail').value = userinf[1] || '';
-                document.getElementById('userAddress').value = userinf[2] || '';
-                document.getElementById('userPhone').value = userinf[3] || '';
-                document.getElementById('userSex').value = userinf[4] || '其他';
-                document.getElementById('userAccount').textContent = userinf[5] || '未提供';
-                document.getElementById('userPassword').value = userinf[6] || '';
-                originalPassword = userinf[6] || '';
+                originalUserData = {
+                    account: userinf[5] || '未提供',
+                    password: userinf[6] || '',
+                    name: userinf[0] || '',
+                    email: userinf[1] || '',
+                    address: userinf[2] || '',
+                    phone: userinf[3] || '',
+                    sex: userinf[4] || '其他'
+                };
+
+                populateUserInfo(originalUserData);
 
                 if (creditCardInf) {
                     creditCards = creditCardInf.map(card => ({
