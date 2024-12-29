@@ -40,6 +40,7 @@ def sales_report():
 @app.route('/sales_report', methods=['POST'])
 def get_sales_report():
     data = request.json
+    print(data)
     report_type = data.get('type')
     periods = data.get('periods')
     day_of_week = data.get('day_of_week')
@@ -48,22 +49,17 @@ def get_sales_report():
         return jsonify({"error": "Invalid input parameters"}), 400
 
     # Mock data generation based on report type and periods
-    mock_data = []
-    for i in range(periods):
-        if report_type == 'day':
-            period_label = f"2023-11-{i+1:02d}"
-        elif report_type == 'week':
-            period_label = f"2023-11-{i*7+1:02d}"
-        else:  # month
-            period_label = f"2023-{i+1:02d}"
-        
-        mock_data.append({
-            "period_label": period_label,
-            "total_value": round(1000 + i * 100 + random.uniform(-100, 100), 2),
-            "total_quantity": round(50 + i * 5 + random.uniform(-5, 5))
+    response_data = []
+    for _ in range(periods):
+        total_value = round(1000 + random.uniform(-50, 50), 2)
+        total_quantity = round(50 + random.uniform(-5, 5), 2)
+        response_data.append({
+            "total_value": total_value,
+            "total_quantity": total_quantity
         })
+    print(response_data)
 
-    return jsonify({"type": report_type, "data": mock_data})
+    return jsonify({"type": report_type, "data": response_data})
 
 
 if __name__ == '__main__':

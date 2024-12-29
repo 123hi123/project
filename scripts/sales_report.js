@@ -21,9 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
             periods: periodsValue
         };
 
-        if (type === 'day') {
-            requestData.day_of_week = new Date().getDay();
-        }
+        
+        requestData.day_of_week = new Date().getDay();
+        
 
         try {
             const response = await fetch('http://127.0.0.1:5000/sales_report', {
@@ -47,7 +47,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateChart(data) {
-        const labels = data.data.map(item => item.period_label);
+        let labels = [];
+        const today = new Date();
+        
+        for (let i = data.data.length - 1; i >= 0; i--) {
+            if (data.type === 'day') {
+                const date = new Date(today);
+                date.setDate(today.getDate() - i);
+                labels.push(date.toISOString().split('T')[0]); // YYYY-MM-DD
+            } else if (data.type === 'week') {
+                const date = new Date(today);
+                const day = date.getDay();
+                const diff = date.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+                date.setDate(diff - (i * 7));
+                labels.push(date.toISOString().split('T')[0]); // first day of the week (Monday)
+            } else if (data.type === 'month') {
+                const date = new Date(today.getFullYear(), today.getMonth() - i, 1);
+                labels.push(date.toISOString().slice(0, 7)); // YYYY-MM
+            }
+        }
         const totalValues = data.data.map(item => item.total_value);
         const totalQuantities = data.data.map(item => item.total_quantity);
         const avgPrices = data.data.map(item => item.total_value / item.total_quantity);
